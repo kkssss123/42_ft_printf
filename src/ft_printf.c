@@ -6,11 +6,20 @@
 /*   By: sgwon <sgwon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 12:15:54 by sgwon             #+#    #+#             */
-/*   Updated: 2025/11/11 16:57:21 by sgwon            ###   ########.fr       */
+/*   Updated: 2025/11/18 07:08:24 by sgwon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
+
+static size_t	check_and_init(const char *format, size_t *cur, ssize_t *total)
+{
+	if (!format)
+		return (0);
+	*cur = 0;
+	*total = 0;
+	return (1);
+}
 
 static size_t	get_next_percent(const char *format, size_t cur)
 {
@@ -29,9 +38,6 @@ static ssize_t	print_literal(const char *format, size_t len, ssize_t *total)
 	return (n);
 }
 
-/**
- * %p The void * pointer argument has to be len in hexadecimal format.
- */
 static ssize_t	print_specifier(const char *format, size_t *i, va_list *args)
 {
 	char	c;
@@ -67,8 +73,8 @@ int	ft_printf(const char *format, ...)
 	ssize_t	total;
 
 	va_start(args, format);
-	cur = 0;
-	total = 0;
+	if (!check_and_init(format, &cur, &total))
+		return (-1);
 	while (1)
 	{
 		next = get_next_percent(format, cur);
